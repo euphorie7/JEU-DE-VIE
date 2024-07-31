@@ -1,0 +1,20 @@
+<AutomateCellulaire>
+    <Dimensions>1</Dimensions>
+    <Taille>
+        <Valeur>201</Valeur>
+        <Valeur>150</Valeur>
+    </Taille>
+    <!-- 
+    <Coupe>
+        <Valeur>X</Valeur>
+    </Coupe>
+  -->
+    
+    <Regles>
+        <Valeur>SI(ET(EQ(COMPTER(G2),1),EQ(COMPTER(G0),0)),1,0)</Valeur>
+    </Regles>
+    <CellulesInitiales>   
+            <Valeur>100,0</Valeur>   
+          
+    </CellulesInitiales>
+</AutomateCellulaire>

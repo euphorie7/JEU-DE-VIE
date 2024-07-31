@@ -1,0 +1,63 @@
+<AutomateCellulaire>
+    <Dimensions>2</Dimensions>
+    <Taille>
+        <Valeur>51</Valeur>
+        <Valeur>60</Valeur>
+    </Taille>
+    <!-- 
+    <Coupe>
+        <Valeur>X</Valeur>
+    </Coupe>
+Survie : Une cellule vivante avec 2 ou 3 voisins vivants reste en vie.
+Naissance : Une cellule morte avec exactement 3 voisins vivants devient vivante. *
+Mort par isolement : Une cellule vivante avec moins de 2 voisins vivants meurt.*
+Mort par surpopulation : Une cellule vivante avec plus de 3 voisins vivants meurt. jutilise 4 parceque la cellule elle meme est inclue dans G8
+  -->
+
+    <Regles>
+        <Valeur>SI(ET(EQ(COMPTER(G0),0),EQ(COMPTER(G8),3)),1,SI(ET(EQ(COMPTER(G0),1),OU(EQ(COMPTER(G8),3),EQ(COMPTER(G8),4))),1,0))</Valeur>
+        
+    </Regles>
+    
+    <CellulesInitiales>   
+                  
+        <Valeur>4,0</Valeur>
+        <Valeur>5,0</Valeur>                     
+        <Valeur>4,1</Valeur>
+        <Valeur>5,1</Valeur>
+        <Valeur>4,10</Valeur>
+        <Valeur>5,10</Valeur>
+        <Valeur>6,10</Valeur>
+        <Valeur>3,11</Valeur>
+        <Valeur>7,11</Valeur>
+        <Valeur>2,12</Valeur>     
+        <Valeur>8,12</Valeur>
+        <Valeur>2,13</Valeur>
+        <Valeur>8,13</Valeur>
+        <Valeur>5,14</Valeur>
+        <Valeur>3,15</Valeur>
+        <Valeur>7,15</Valeur>
+        <Valeur>4,16</Valeur>
+        <Valeur>5,16</Valeur>
+        <Valeur>6,16</Valeur>
+        <Valeur>5,17</Valeur>
+        <Valeur>2,20</Valeur>
+        <Valeur>3,20</Valeur>
+        <Valeur>4,20</Valeur>
+        <Valeur>2,21</Valeur>
+        <Valeur>3,21</Valeur>
+        <Valeur>4,21</Valeur>
+        <Valeur>1,22</Valeur>
+        <Valeur>5,22</Valeur>
+        <Valeur>0,24</Valeur>
+        <Valeur>1,24</Valeur>
+        <Valeur>5,24</Valeur>
+        <Valeur>6,24</Valeur>
+        <Valeur>2,34</Valeur>
+        <Valeur>3,34</Valeur>
+        <Valeur>2,35</Valeur>
+        <Valeur>3,35</Valeur>
+        
+                       
+    </CellulesInitiales>
+</AutomateCellulaire>

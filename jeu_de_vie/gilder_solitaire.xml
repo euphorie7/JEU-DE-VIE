@@ -1,0 +1,34 @@
+<AutomateCellulaire>
+    <Dimensions>2</Dimensions>
+    <Taille>
+        <Valeur>51</Valeur>
+        <Valeur>60</Valeur>
+    </Taille>
+    <!-- 
+    <Coupe>
+        <Valeur>X</Valeur>
+    </Coupe>
+Survie : Une cellule vivante avec 2 ou 3 voisins vivants reste en vie.
+Naissance : Une cellule morte avec exactement 3 voisins vivants devient vivante. *
+Mort par isolement : Une cellule vivante avec moins de 2 voisins vivants meurt.*
+Mort par surpopulation : Une cellule vivante avec plus de 3 voisins vivants meurt. jutilise 4 parceque la cellule elle meme est inclue dans G8
+  -->
+
+    <Regles>
+        <Valeur>SI(ET(EQ(COMPTER(G0),0),EQ(COMPTER(G8),3)),1,SI(ET(EQ(COMPTER(G0),1),OU(EQ(COMPTER(G8),3),EQ(COMPTER(G8),4))),1,0))</Valeur>
+       
+        
+        
+    </Regles>
+    
+    <CellulesInitiales>   
+            <Valeur>1,0</Valeur> 
+            
+            <Valeur>2,1</Valeur> 
+           
+            <Valeur>0,2</Valeur>
+            <Valeur>1,2</Valeur>
+            <Valeur>2,2</Valeur>
+                       
+    </CellulesInitiales>
+</AutomateCellulaire>

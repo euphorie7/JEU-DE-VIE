@@ -1,0 +1,168 @@
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+public class Regle  {
+
+
+    private Noeud racine;
+
+    public Regle(String xmlFile) {
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
+            Element rootElement = doc.getDocumentElement();
+            racine = buildTree(rootElement);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Noeud buildTree(Element element) throws myException {
+        switch (element.getTagName()) {
+            case "Regle":
+                return gererRegleElement(element);
+            case "Noeud":
+                return gererNoeudElement(element);
+            case "Left":
+            case "Middle":
+            case "Right":
+                return gererLMDElement(element);
+
+            case "Entier":
+                return gererEntierElement(element);
+            case "Voisinage":
+                return gererVoisinageElement(element);
+            default:
+                throw new myException("Élément inconnu: " + element.getTagName());
+        }
+    }
+    private Noeud gererRegleElement(Element element) throws myException {
+        NodeList listeDeNoeud = element.getElementsByTagName("Noeud");
+        if (listeDeNoeud.getLength() > 0) {
+            return buildTree((Element) listeDeNoeud.item(0));
+        }
+        return null;
+    }
+    private Noeud gererNoeudElement(Element element) throws myException {
+        String value = element.getElementsByTagName("Value").item(0).getTextContent();
+        Noeud droite = getDirectChild("Right", element);
+        Noeud gauche = getDirectChild("Left", element);
+        Noeud middle = getDirectChild("Middle", element);
+
+        return createNoeud(value, gauche, middle, droite,element);
+    }
+    /*
+    private Noeud buildChild(String tagName, Element element) throws myException {
+        NodeList list = element.getElementsByTagName(tagName);    build child donne le premier descendant et pas le fils direct
+        if (list.getLength() > 0) {
+            return buildTree((Element) list.item(0));
+        }
+        return null;
+    }
+    */
+    private Noeud getDirectChild(String tagName, Element element) throws myException {
+        NodeList children = element.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node node = children.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element childElement = (Element) node;
+                if (childElement.getTagName().equals(tagName)) {
+                    return buildTree(childElement);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Noeud createNoeud(String value, Noeud gauche, Noeud middle, Noeud droite,Element element) throws myException {
+        Noeud n;
+        switch (value) {
+
+            case "SI":
+                return new SI(gauche, middle, droite);
+            case "EQ":
+                n=new EQ(gauche, droite);
+
+                return n;
+            case "SUPEQ":
+                return new SUPEQ(gauche, droite);
+            case "NON":
+                return new NON(gauche);
+            case "OU":
+                return new OU(gauche, droite);
+            case "SUP":
+                return new SUP(gauche, droite);
+            case "ET":
+                n=new ET(gauche, droite);
+
+                return n;
+            case "COMPTER":
+                return gererLMDElement(element);
+            default:
+                throw new myException("Opérateur inconnu: " + value);
+        }
+    }
+    private Noeud gererEntierElement(Element element) {
+        return new Entier(Integer.parseInt(element.getElementsByTagName("Value").item(0).getTextContent()));
+    }
+    private Feuille gererVoisinageElement(Element element) throws myException {
+        String value = element.getElementsByTagName("Value").item(0).getTextContent();
+        Voisinage v = createVoisinage(value);
+        return new COMPTER(v);
+    }
+    public Voisinage createVoisinage(String value)
+    {
+        Voisinage v;
+        switch ( value ) {
+            case "G0":
+                v= new G0();
+                break;
+            case "G2":
+                v= new G2();
+                break;
+            case "G4":
+                v= new G4();
+                break;
+            case "G6":
+                v= new G6();
+                break;
+            case "G8":
+                v= new G8();
+                break;
+            case "G26":
+                v= new G26();
+                break;
+            default:
+                v=null;
+        }
+        return v;
+    }private Noeud gererLMDElement(Element element) throws myException {
+        // Vérifier le premier nœud enfant Noeud et le traiter, sinon traiter selon le type spécifique.
+        NodeList noeuds = element.getElementsByTagName("Noeud");
+        if (noeuds.getLength() > 0) {
+            return buildTree((Element) noeuds.item(0));
+        } else {
+            // Traiter d'autres types d'éléments tels que "Entier" ou "Voisinage"
+            String tag = element.getTagName();
+            NodeList entiers = element.getElementsByTagName("Entier");
+            NodeList voisinages = element.getElementsByTagName("Voisinage");
+
+            if (entiers.getLength() > 0) {
+                return gererEntierElement((Element) entiers.item(0));
+            } else if (voisinages.getLength() > 0) {
+                return gererVoisinageElement((Element) voisinages.item(0));
+            } else {
+                throw new myException("Aucun élément valide trouvé dans: " + tag);
+            }
+        }
+    }
+
+
+    public int evaluer(Cellule c)
+    {
+       return  racine.evaluer(c);
+    }
+}
+
